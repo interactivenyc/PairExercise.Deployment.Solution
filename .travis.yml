@@ -1,31 +1,27 @@
 language: node_js
 node_js:
-  - node # uses most recent stable node version
+    - node # uses most recent stable node version
 services:
-  - postgresql # starts up postgres
+    - postgresql # starts up postgres
 addons:
-  postgresql: '9.6' # highest available postgres version on Travis
+    postgresql: '9.6' # highest available postgres version on Travis
 dist: trusty # uses trusty environment
 sudo: false # when on trusty, uses Docker containers for speed
 notifications:
-  email:
-    on_success: change # default: change (only when going from broken to fixed)
-    on_failure: always # default: always (which is annoying, as it should be)
+    email:
+        on_success: change # default: change (only when going from broken to fixed)
+        on_failure: always # default: always (which is annoying, as it should be)
 install:
-  - npm ci # faster, goes only from package-lock
+    - npm ci # faster, goes only from package-lock
 before_script:
-  - psql -c 'create database "deployment-exercise-test";' -U postgres # remember to change this name if you change it elsewhere (e.g. package.json)
+    - psql -c 'create database "deployment-exercise-test";' -U postgres # remember to change this name if you change it elsewhere (e.g. package.json)
 
 before_deploy:
-  - npm run build-client # make the bundle
-  - rm -rf node_modules # omit from the tarball, since we skip cleanup
+    - npm run build-client # make the bundle
+    - rm -rf node_modules # omit from the tarball, since we skip cleanup
 deploy:
-  skip_cleanup: true # prevents travis from deleting the build
-  provider: heroku
-  app: fs-deploy-test # see README
-  api_key:
-    secure: c2Oh2W2EOd+hxczUzku/uRz9GdQImX85a4gjBNav0GE786U7eHy7RRFXyXKkBtQZ0DmzGcf6CMujo9I3TsHJiikiwXvop
-NPee7Nu+KI3yxRKqBLJzlzBYunedZbE3Avshq2jAhp57pCswu4ASjuxHxn6XXsd7mUyZRMSczUxJDsTJoJn0JIepghu+3JKGwHPMqNF0/
-Ox2vAJIAjc8R63t3wQbIWP95EGLS30ARVmUeS2LFitl+HyRz0K6BYyH3X6fOEMzUPFGVmTMvp8s+qgYG+nqW4eTiI/teOfybN8E20GM9Z
-mqI+ZVx61ItSK9lJhCQ1EinKRtCdBAPSbVo7YfhHxfonhKfpmyeyzPXGnHuuvjtBZofUm6BG+qtM2wn1Syyn2WDNVlLOE4Gen0HsvpXnc
-MmyWaIaP71F0mlEFXxDVCFUBLXs6XRh5JBtCV2CsbA6kDUZUIhZUkBs1q/OUclptcTc+OShtfAd2U7mZVqrHA55CYruS+Ndcu0UmtH2qpIAcfcBWsaZPaY8kE/w2QOaFiiDwP+Jz5jDCilDA4YNcX6EEd2tql1JAL4lJU2kYo8Tne3TS9CrAEMiFyAulCJkp0Ls/RVKc6SjXC0q6IQgcG0Qfd/5lvloPVmjg7wafOhxqEf1Ls6nJFiJQyFMvCfblqlFaKkE1DyY3cfLUhQs=
+    skip_cleanup: true # prevents travis from deleting the build
+    provider: heroku
+    app: fs-deploy-test # see README
+    api_key:
+        secure: c2Oh2W2EOd+hxczUzku/uRz9GdQImX85a4gjBNav0GE786U7eHy7RRFXyXKkBtQZ0DmzGcf6CMujo9I3TsHJiikiwXvopNPee7Nu+KI3yxRKqBLJzlzBYunedZbE3Avshq2jAhp57pCswu4ASjuxHxn6XXsd7mUyZRMSczUxJDsTJoJn0JIepghu+3JKGwHPMqNF0/Ox2vAJIAjc8R63t3wQbIWP95EGLS30ARVmUeS2LFitl+HyRz0K6BYyH3X6fOEMzUPFGVmTMvp8s+qgYG+nqW4eTiI/teOfybN8E20GM9ZmqI+ZVx61ItSK9lJhCQ1EinKRtCdBAPSbVo7YfhHxfonhKfpmyeyzPXGnHuuvjtBZofUm6BG+qtM2wn1Syyn2WDNVlLOE4Gen0HsvpXncMmyWaIaP71F0mlEFXxDVCFUBLXs6XRh5JBtCV2CsbA6kDUZUIhZUkBs1q/OUclptcTc+OShtfAd2U7mZVqrHA55CYruS+Ndcu0UmtH2qpIAcfcBWsaZPaY8kE/w2QOaFiiDwP+Jz5jDCilDA4YNcX6EEd2tql1JAL4lJU2kYo8Tne3TS9CrAEMiFyAulCJkp0Ls/RVKc6SjXC0q6IQgcG0Qfd/5lvloPVmjg7wafOhxqEf1Ls6nJFiJQyFMvCfblqlFaKkE1DyY3cfLUhQs=
